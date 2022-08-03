@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.paralesfinals">
+    package="scs.usjr.bloc_finals_exam">
    <application
-        android:label="paralesfinals"
+        android:label="bloc_finals_exam"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
