@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
 
 import 'app_router.dart';
 import 'app_themes.dart';
@@ -6,11 +7,17 @@ import 'blocs/bloc_exports.dart';
 import 'models/task.dart';
 import 'screens/tabs_screen.dart';
 
-void main() {
-  BlocOverrides.runZoned(
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  final storage = await HydratedStorage.build(
+      storageDirectory: await getApplicationDocumentsDirectory());
+
+  HydratedBlocOverrides.runZoned(
     () => runApp(
       MyApp(appRouter: AppRouter()),
     ),
+    storage: storage,
   );
 }
 
@@ -22,11 +29,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-        create: (context) => TasksBloc()
-          ..add(AddTask(
-            task: Task(title: 'Task1', description: ''),
-          )),
+        create: (context) => TasksBloc(),
         child: MaterialApp(
+          debugShowCheckedModeBanner: false,
           title: 'BloC Tasks App',
           theme: AppThemes.appThemeData[AppTheme.lightMode],
           home: const TabsScreen(),

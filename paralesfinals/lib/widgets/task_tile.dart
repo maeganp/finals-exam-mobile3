@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:paralesfinals/blocs/bloc/tasks_bloc.dart';
+
+import 'package:paralesfinals/blocs/bloc_exports.dart';
 
 import '../models/task.dart';
 import 'add_edit_task.dart';
@@ -66,7 +70,11 @@ class TaskTile extends StatelessWidget {
           children: [
             Checkbox(
                 value: task.isDone,
-                onChanged: task.isDeleted! ? null : (value) {}),
+                onChanged: task.isDeleted == false
+                    ? (value) {
+                        context.read<TasksBloc>().add(UpdateTask(task: task));
+                      }
+                    : null),
             PopupMenu(
               task: task,
               editCallback: () {
