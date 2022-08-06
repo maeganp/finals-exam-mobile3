@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:paralesfinals/blocs/bloc/tasks_bloc.dart';
+import 'package:paralesfinals/blocs/task_bloc/tasks_bloc.dart';
 
 import 'package:paralesfinals/blocs/bloc_exports.dart';
 
