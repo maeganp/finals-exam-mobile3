@@ -2,7 +2,7 @@ import 'package:paralesfinals/blocs/bloc_exports.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../blocs/bloc/tasks_bloc.dart';
+import '../blocs/task_bloc/tasks_bloc.dart';
 import '../screens/recycle_bin_screen.dart';
 import '../screens/tabs_screen.dart';
 import '../test_data.dart';
