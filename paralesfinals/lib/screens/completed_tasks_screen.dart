@@ -1,28 +1,55 @@
 import 'package:flutter/material.dart';
 
 import '../models/task.dart';
-import '../test_data.dart';
-import '../widgets/tasks_list.dart';
+import 'task_tile.dart';
 
-class CompletedTasksScreen extends StatelessWidget {
-  const CompletedTasksScreen({Key? key}) : super(key: key);
+class TasksList extends StatelessWidget {
+  const TasksList({
+    Key? key,
+    required this.tasksList,
+  }) : super(key: key);
+
+  final List<Task> tasksList;
 
   @override
   Widget build(BuildContext context) {
-    List<Task> tasksList = TestData.completedTasks;
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Center(
-            child: Chip(
-              label: Text('${tasksList.length} Tasks'),
-            ),
-          ),
-          const SizedBox(height: 10),
-          TasksList(tasksList: tasksList),
-        ],
+    return Expanded(
+      child: SingleChildScrollView(
+        child: ExpansionPanelList.radio(
+          children: tasksList
+              .map(
+                (task) => ExpansionPanelRadio(
+                  value: task.id!,
+                  headerBuilder: (context, isOpen) => TaskTile(task: task),
+                  body: Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.only(bottom: 16),
+                    margin: const EdgeInsets.symmetric(horizontal: 16),
+                    child: SelectableText.rich(
+                      TextSpan(
+                        children: [
+                          const TextSpan(
+                            text: 'Title\n',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          TextSpan(text: task.title),
+                          const TextSpan(
+                            text: '\n\nDescription\n',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          TextSpan(text: task.description),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              )
+              .toList(),
+        ),
       ),
     );
   }
