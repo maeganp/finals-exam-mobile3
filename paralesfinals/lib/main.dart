@@ -4,7 +4,6 @@ import 'package:path_provider/path_provider.dart';
 import 'app_router.dart';
 import 'app_themes.dart';
 import 'blocs/bloc_exports.dart';
-import 'models/task.dart';
 import 'screens/tabs_screen.dart';
 
 void main() async {
@@ -14,9 +13,7 @@ void main() async {
       storageDirectory: await getApplicationDocumentsDirectory());
 
   HydratedBlocOverrides.runZoned(
-    () => runApp(
-      MyApp(appRouter: AppRouter()),
-    ),
+    () => runApp(MyApp(appRouter: AppRouter())),
     storage: storage,
   );
 }
@@ -28,14 +25,24 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-        create: (context) => TasksBloc(),
-        child: MaterialApp(
-          debugShowCheckedModeBanner: false,
-          title: 'BloC Tasks App',
-          theme: AppThemes.appThemeData[AppTheme.lightMode],
-          home: const TabsScreen(),
-          onGenerateRoute: appRouter.onGenerateRoute,
-        ));
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (context) => TasksBloc()),
+        BlocProvider(create: (context) => SwitchBloc())
+      ],
+      child: BlocBuilder<SwitchBloc, SwitchState>(
+        builder: (context, state) {
+          return MaterialApp(
+            debugShowCheckedModeBanner: false,
+            title: 'BloC Tasks App',
+            theme: state.switchValue
+                ? AppThemes.appThemeData[AppTheme.darkMode]
+                : AppThemes.appThemeData[AppTheme.lightMode],
+            home: const TabsScreen(),
+            onGenerateRoute: appRouter.onGenerateRoute,
+          );
+        },
+      ),
+    );
   }
 }
