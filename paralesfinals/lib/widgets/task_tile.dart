@@ -82,7 +82,7 @@ class TaskTile extends StatelessWidget {
                 _editTask(context);
               },
               likeOrDislikeCallback: () {},
-              cancelOrDeleteCallback: () {},
+              cancelOrDeleteCallback: () => _removeOrDeleteTask(context, task),
               restoreTaskCallback: () => {},
             ),
           ],

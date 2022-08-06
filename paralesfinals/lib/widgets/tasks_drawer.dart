@@ -29,37 +29,33 @@ class TasksDrawer extends StatelessWidget {
                 style: Theme.of(context).textTheme.headline5,
               ),
             ),
-            GestureDetector(
-              child: ListTile(
-                leading: const Icon(Icons.folder_special),
-                title: const Text('My Tasks'),
-                trailing: Text(
-                  '${TestData.pendingTasks.length} | ${TestData.completedTasks.length}',
-                ),
-                onTap: () => Navigator.pushReplacementNamed(
-                  context,
-                  TabsScreen.path,
-                ),
+            ListTile(
+              leading: const Icon(Icons.folder_special),
+              title: const Text('My Tasks'),
+              trailing: Text(
+                '${TestData.pendingTasks.length} | ${TestData.completedTasks.length}',
+              ),
+              onTap: () => Navigator.pushReplacementNamed(
+                context,
+                TabsScreen.path,
               ),
             ),
-            GestureDetector(
-              child: BlocBuilder<TasksBloc, TasksState>(
-                builder: (context, state) {
-                  return GestureDetector(
-                    child: ListTile(
-                      leading: const Icon(Icons.folder_special),
-                      title: const Text('My Tasks'),
-                      trailing: Text(
-                        '${state.pendingTasks.length} | ${state.completedTasks.length}',
-                      ),
-                      onTap: () => Navigator.pushReplacementNamed(
-                        context,
-                        TabsScreen.path,
-                      ),
+            BlocBuilder<TasksBloc, TasksState>(
+              builder: (context, state) {
+                return GestureDetector(
+                  child: ListTile(
+                    leading: const Icon(Icons.folder_special),
+                    title: const Text('My Tasks'),
+                    trailing: Text(
+                      '${state.pendingTasks.length} | ${state.completedTasks.length}',
                     ),
-                  );
-                },
-              ),
+                    onTap: () => Navigator.pushReplacementNamed(
+                      context,
+                      TabsScreen.path,
+                    ),
+                  ),
+                );
+              },
             ),
             const Divider(),
             ListTile(
