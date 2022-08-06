@@ -1,109 +1,84 @@
 import 'package:flutter/material.dart';
 
-import '../blocs/bloc_exports.dart';
 import '../models/task.dart';
 
-class AddEditTask extends StatefulWidget {
-  final Task? task;
-
-  const AddEditTask({
+class PopupMenu extends StatelessWidget {
+  const PopupMenu({
     Key? key,
-    this.task,
+    required this.task,
+    required this.editCallback,
+    required this.likeOrDislikeCallback,
+    required this.cancelOrDeleteCallback,
+    required this.restoreTaskCallback,
   }) : super(key: key);
 
-  @override
-  State<AddEditTask> createState() => _AddEditTaskState();
-}
+  final Task task;
+  final VoidCallback editCallback;
+  final VoidCallback likeOrDislikeCallback;
+  final VoidCallback cancelOrDeleteCallback;
+  final VoidCallback restoreTaskCallback;
 
-class _AddEditTaskState extends State<AddEditTask> {
-  late String _title;
-  late String _description;
+  List<PopupMenuItem> getActiveTaskMenuItems() {
+    return [
+      PopupMenuItem(
+        onTap: editCallback,
+        child: TextButton.icon(
+          onPressed: editCallback,
+          icon: const Icon(Icons.edit),
+          label: const Text('Edit'),
+        ),
+      ),
+      PopupMenuItem(
+        onTap: likeOrDislikeCallback,
+        child: TextButton.icon(
+          onPressed: null,
+          icon: task.isFavorite == false
+              ? const Icon(Icons.bookmark_add_outlined)
+              : const Icon(Icons.bookmark_remove_outlined),
+          label: task.isFavorite == false
+              ? const Text('Add to\nBookmarks')
+              : const Text('Remove from\nBookmarks'),
+        ),
+      ),
+      PopupMenuItem(
+        onTap: cancelOrDeleteCallback,
+        child: TextButton.icon(
+          onPressed: null,
+          icon: const Icon(Icons.delete),
+          label: const Text('Delete'),
+        ),
+      ),
+    ];
+  }
 
-  @override
-  void initState() {
-    final task = widget.task;
-
-    if (task != null) {
-      _title = task.title;
-      _description = task.description;
-    } else {
-      _title = '';
-      _description = '';
-    }
-
-    super.initState();
+  List<PopupMenuItem> getRecycleBinTaskMenuItems() {
+    return [
+      PopupMenuItem(
+        onTap: restoreTaskCallback,
+        child: TextButton.icon(
+          onPressed: cancelOrDeleteCallback,
+          icon: const Icon(Icons.restore_from_trash),
+          label: const Text('Restore'),
+        ),
+      ),
+      PopupMenuItem(
+        onTap: cancelOrDeleteCallback,
+        child: TextButton.icon(
+          onPressed: null,
+          icon: const Icon(Icons.delete_forever),
+          label: const Text('Delete Forever'),
+        ),
+      ),
+    ];
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(28),
-      child: Form(
-        child: Column(
-          children: [
-            Text(
-              widget.task == null ? 'Add Task' : 'Edit Task',
-              style: const TextStyle(fontSize: 24),
-            ),
-            const SizedBox(height: 10),
-            TextFormField(
-              initialValue: _title,
-              autofocus: true,
-              decoration: const InputDecoration(
-                label: Text('Title'),
-                border: OutlineInputBorder(),
-              ),
-              autovalidateMode: AutovalidateMode.onUserInteraction,
-              validator: (text) {
-                if (text == null || text.isEmpty) {
-                  return 'Can\'t be empty';
-                }
-                return null;
-              },
-              onChanged: (text) => setState(() => _title = text),
-            ),
-            const SizedBox(height: 20),
-            TextFormField(
-              initialValue: _description,
-              decoration: const InputDecoration(
-                label: Text('Description'),
-                border: OutlineInputBorder(),
-              ),
-              minLines: 3,
-              maxLines: 5,
-              autovalidateMode: AutovalidateMode.onUserInteraction,
-              validator: (text) {
-                if (text == null || text.isEmpty) {
-                  return 'Can\'t be empty';
-                }
-                return null;
-              },
-              onChanged: (text) => setState(() => _description = text),
-            ),
-            const SizedBox(height: 16),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                TextButton(
-                  onPressed: () => Navigator.pop(context),
-                  child: const Text('Cancel'),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    var task = Task(
-                      title: _title,
-                      description: _description,
-                    );
-                    context.read<TasksBloc>().add(AddTask(task: task));
-                    Navigator.pop(context);
-                  },
-                  child: const Text('Add'),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
+    return PopupMenuButton(
+      icon: const Icon(Icons.more_vert),
+      itemBuilder: (context) => task.isDeleted!
+          ? getRecycleBinTaskMenuItems()
+          : getActiveTaskMenuItems(),
     );
   }
 }
