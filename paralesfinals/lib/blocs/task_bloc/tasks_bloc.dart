@@ -1,7 +1,6 @@
-import 'package:bloc_mobile_finals/blocs/bloc_exports.dart';
-import 'package:bloc_mobile_finals/models/task.dart';
-import 'package:equatable/equatable.dart';
+import 'package:paralesfinals/blocs/bloc_exports.dart';
 import 'package:paralesfinals/models/task.dart';
+import 'package:equatable/equatable.dart';
 
 import '../bloc_exports.dart';
 
@@ -13,8 +12,8 @@ class TasksBloc extends HydratedBloc<TasksEvent, TasksState> {
     on<AddTask>(_onAddTask);
     on<UpdateTask>(_onUpdateTask);
     on<DeleteTask>(_onDeleteTask);
-    //on<RemoveTask>(_onRemoveTask);
-    //on<MarkFavoriteOrUnfavoriteTask>(_onMarkFavoriteorUnfavoriteTask);
+    on<RemoveTask>(_onRemoveTask);
+    on<MarkFavoriteOrUnfavoriteTask>(_onMarkFavoriteorUnfavoriteTask);
   }
 
   void _onAddTask(AddTask event, Emitter<TasksState> emit) {
