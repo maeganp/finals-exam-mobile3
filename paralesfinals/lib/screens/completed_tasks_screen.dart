@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:paralesfinals/widgets/task_tile.dart';
 
 import '../models/task.dart';
-import 'task_tile.dart';
+// import 'task_tile.dart';
 
 class TasksList extends StatelessWidget {
   const TasksList({
